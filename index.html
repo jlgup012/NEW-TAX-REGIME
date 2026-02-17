@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Comparison - Old vs New Regime (FY 2026-27)</title>
+
+<style>
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        background: linear-gradient(120deg, #f0f9ff, #fef9f5);
+    }
+
+    header {
+        background: linear-gradient(90deg, #003366, #0066cc, #00c6ff);
+        color: white;
+        padding: 18px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .container {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .inputs {
+        flex: 2;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 12px rgba(0,0,0,0.15);
+        border-top: 6px solid #0066cc;
+    }
+
+    .results {
+        flex: 1;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        position: sticky;
+        top: 15px;
+        height: fit-content;
+        border-top: 6px solid #00aa55;
+    }
+
+    h2 {
+        color: #003366;
+        margin-top: 0;
+        padding-bottom: 5px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    label {
+        font-weight: 600;
+        display: block;
+        margin-top: 12px;
+        color: #222;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border: 2px solid #0066cc;
+        box-shadow: 0 0 8px rgba(0,102,204,0.4);
+    }
+
+    input[readonly] {
+        background: linear-gradient(90deg, #eef7ff, #e6fff3);
+        font-weight: bold;
+        border: 1px solid #009966;
+        color: #003366;
+    }
+
+    .row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .row div {
+        flex: 1;
+    }
+
+    button {
+        margin-top: 22px;
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(90deg, #0066cc, #00c6ff);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+    }
+
+    button:hover {
+        transform: scale(1.02);
+        background: linear-gradient(90deg, #004c99, #0099ff);
+    }
+
+    .note {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #444;
+        padding: 10px;
+        background: #fff5d9;
+        border-left: 5px solid orange;
+        border-radius: 8px;
+    }
+
+    .highlight {
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        margin-top: 15px;
+        padding: 15px;
+        background: linear-gradient(90deg, #00aa55, #00dd88);
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .sectionBox {
+        margin-top: 18px;
+        padding: 15px;
+        border-radius: 12px;
+        background: linear-gradient(90deg, #f5fbff, #f7fff9);
+        border: 1px solid #d6eaff;
+    }
+
+    @media(max-width: 900px) {
+        .container {
+            flex-direction: column;
+        }
+        .results {
+            position: relative;
+        }
+        .row {
+            flex-direction: column;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    🌟 Income Tax Comparison Calculator (Old vs New Regime) - FY 2026-27 🌟
+</header>
+
+<div class="container">
+
+    <!-- INPUT SECTION -->
+    <div class="inputs">
+
+        <h2>💰 Income Details</h2>
+        <label>Gross Annual Income (₹)</label>
+        <input type="number" id="income" value="4000000">
+
+        <div class="sectionBox">
+            <h2>🏠 HRA Exemption Calculator (Old Regime)</h2>
+
+            <div class="row">
+                <div>
+                    <label>Basic Salary (Annual) (₹)</label>
+                    <input type="number" id="basic_salary" value="0">
+                </div>
+                <div>
+                    <label>Actual HRA Received (Annual) (₹)</label>
+                    <input type="number" id="hra_received" value="0">
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Rent Paid (Annual) (₹)</label>
+                    <input type="number" id="rent_paid" value="0">
+                </div>
+                <div>
+                    <label>City Category</label>
+                    <select id="city_category">
+                        <option value="metro">Metro (Delhi, Mumbai, Kolkata, Chennai)</option>
+                        <option value="nonmetro" selected>Non-Metro</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>Calculated HRA Exemption (Auto) (₹)</label>
+            <input type="text" id="hra_exemption" readonly value="₹ 0">
+        </div>
+
+        <div class="sectionBox">
+            <h2>📌 Old Regime Deductions</h2>
+
+            <div class="row">
+                <div>
+                    <label>Standard Deduction (Old Regime) (₹)</label>
+                    <input type="number" id="std_old" value="50000">
+                </div>
+                <div>
+                    <label>LTA Exemption (₹)</label>
+                    <input type="number" id="lta" value="0">
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Professional Tax (₹)</label>
+                    <input type="number" id="ptax" value="0">
+                </div>
+                <div>
+                    <label>Other Exemptions (₹)</label>
+                    <input type="number" id="other_exemptions" value="0">
+                </div>
+            </div>
+
+            <label>Section 80C (Max ₹1,50,000)</label>
+            <input type="number" id="sec80c" value="150000">
+
+            <label>Section 80CCD(1B) (NPS Additional) (Max ₹50,000)</label>
+            <input type="number" id="sec80ccd1b" value="0">
+
+            <label>Section 80CCD(2) (Employer NPS Contribution)</label>
+            <input type="number" id="sec80ccd2" value="0">
+
+            <label>Section 80D (Health Insurance Premium)</label>
+            <input type="number" id="sec80d" value="0">
+
+            <label>Section 80E (Education Loan Interest)</label>
+            <input type="number" id="sec80e" value="0">
+
+            <label>Section 80G (Donations)</label>
+            <input type="number" id="sec80g" value="0">
+
+            <label>Home Loan Interest (Section 24B) (Max ₹2,00,000)</label>
+            <input type="number" id="home_interest" value="0">
+
+            <label>Other Deductions (₹)</label>
+            <input type="number" id="other_ded" value="0">
+        </div>
+
+        <button onclick="calculateTax()">🚀 Calculate Tax Comparison</button>
+
+        <div class="note">
+            ✅ This calculator includes: Tax + Surcharge + 4% Cess.  
+            ⚠ Marginal relief is NOT included.
+        </div>
+
+    </div>
+
+    <!-- RESULTS SECTION -->
+    <div class="results">
+        <h2>📊 Frozen Results Panel</h2>
+
+        <label>Taxable Income (Old Regime)</label>
+        <input type="text" id="taxable_old" readonly>
+
+        <label>Tax (Old Regime)</label>
+        <input type="text" id="tax_old_basic" readonly>
+
+        <label>Surcharge (Old Regime)</label>
+        <input type="text" id="tax_old_surcharge" readonly>
+
+        <label>Total Tax Payable (Old Regime)</label>
+        <input type="text" id="tax_old" readonly>
+
+        <hr>
+
+        <label>Taxable Income (New Regime)</label>
+        <input type="text" id="taxable_new" readonly>
+
+        <label>Tax (New Regime)</label>
+        <input type="text" id="tax_new_basic" readonly>
+
+        <label>Surcharge (New Regime)</label>
+        <input type="text" id="tax_new_surcharge" readonly>
+
+        <label>Total Tax Payable (New Regime)</label>
+        <input type="text" id="tax_new" readonly>
+
+        <div class="highlight" id="best_option">
+            ✅ Best Option Will Appear Here
+        </div>
+    </div>
+
+</div>
+
+<script>
+function formatINR(num) {
+    return "₹ " + num.toLocaleString("en-IN");
+}
+
+function calculateHRAExemption() {
+    let basic = parseFloat(document.getElementById("basic_salary").value) || 0;
+    let hraReceived = parseFloat(document.getElementById("hra_received").value) || 0;
+    let rentPaid = parseFloat(document.getElementById("rent_paid").value) || 0;
+    let city = document.getElementById("city_category").value;
+
+    let rentMinus10 = rentPaid - (0.10 * basic);
+    if (rentMinus10 < 0) rentMinus10 = 0;
+
+    let percentBasic = (city === "metro") ? (0.50 * basic) : (0.40 * basic);
+
+    let hraExemption = Math.min(hraReceived, rentMinus10, percentBasic);
+    if (hraExemption < 0) hraExemption = 0;
+
+    document.getElementById("hra_exemption").value = formatINR(Math.round(hraExemption));
+    return hraExemption;
+}
+
+function calculateSurcharge(taxableIncome, basicTax) {
+    let rate = 0;
+
+    if (taxableIncome > 50000000) rate = 0.37;
+    else if (taxableIncome > 20000000) rate = 0.25;
+    else if (taxableIncome > 10000000) rate = 0.15;
+    else if (taxableIncome > 5000000) rate = 0.10;
+
+    return basicTax * rate;
+}
+
+function calculateOldTax(income) {
+    let tax = 0;
+    if (income <= 250000) tax = 0;
+    else if (income <= 500000) tax = (income - 250000) * 0.05;
+    else if (income <= 1000000) tax = 12500 + (income - 500000) * 0.20;
+    else tax = 112500 + (income - 1000000) * 0.30;
+    return tax;
+}
+
+function calculateNewTax(income) {
+    let tax = 0;
+
+    if (income <= 400000) tax = 0;
+    else if (income <= 800000) tax = (income - 400000) * 0.05;
+    else if (income <= 1200000) tax = 20000 + (income - 800000) * 0.10;
+    else if (income <= 1600000) tax = 60000 + (income - 1200000) * 0.15;
+    else if (income <= 2000000) tax = 120000 + (income - 1600000) * 0.20;
+    else if (income <= 2400000) tax = 200000 + (income - 2000000) * 0.25;
+    else tax = 300000 + (income - 2400000) * 0.30;
+
+    return tax;
+}
+
+function calculateTax() {
+    let income = parseFloat(document.getElementById("income").value) || 0;
+    let hraExemption = calculateHRAExemption();
+
+    // Old deductions
+    let std_old = parseFloat(document.getElementById("std_old").value) || 0;
+    let lta = parseFloat(document.getElementById("lta").value) || 0;
+    let ptax = parseFloat(document.getElementById("ptax").value) || 0;
+    let other_exemptions = parseFloat(document.getElementById("other_exemptions").value) || 0;
+
+    let sec80c = parseFloat(document.getElementById("sec80c").value) || 0;
+    let sec80ccd1b = parseFloat(document.getElementById("sec80ccd1b").value) || 0;
+    let sec80ccd2 = parseFloat(document.getElementById("sec80ccd2").value) || 0;
+    let sec80d = parseFloat(document.getElementById("sec80d").value) || 0;
+    let sec80e = parseFloat(document.getElementById("sec80e").value) || 0;
+    let sec80g = parseFloat(document.getElementById("sec80g").value) || 0;
+    let home_interest = parseFloat(document.getElementById("home_interest").value) || 0;
+    let other_ded = parseFloat(document.getElementById("other_ded").value) || 0;
+
+    // Limits
+    if (sec80c > 150000) sec80c = 150000;
+    if (sec80ccd1b > 50000) sec80ccd1b = 50000;
+    if (home_interest > 200000) home_interest = 200000;
+
+    let total_deductions_old =
+        std_old + hraExemption + lta + ptax + other_exemptions +
+        sec80c + sec80ccd1b + sec80ccd2 + sec80d + sec80e + sec80g +
+        home_interest + other_ded;
+
+    let taxable_old = income - total_deductions_old;
+    if (taxable_old < 0) taxable_old = 0;
+
+    let old_basic_tax = calculateOldTax(taxable_old);
+    let old_surcharge = calculateSurcharge(taxable_old, old_basic_tax);
+    let old_tax_plus_surcharge = old_basic_tax + old_surcharge;
+    let old_cess = old_tax_plus_surcharge * 0.04;
+    let total_old_tax = old_tax_plus_surcharge + old_cess;
+
+    // New regime
+    let std_new = 75000;
+    let taxable_new = income - std_new;
+    if (taxable_new < 0) taxable_new = 0;
+
+    let new_basic_tax = calculateNewTax(taxable_new);
+    let new_surcharge = calculateSurcharge(taxable_new, new_basic_tax);
+    let new_tax_plus_surcharge = new_basic_tax + new_surcharge;
+    let new_cess = new_tax_plus_surcharge * 0.04;
+    let total_new_tax = new_tax_plus_surcharge + new_cess;
+
+    // Output
+    document.getElementById("taxable_old").value = formatINR(Math.round(taxable_old));
+    document.getElementById("tax_old_basic").value = formatINR(Math.round(old_basic_tax));
+    document.getElementById("tax_old_surcharge").value = formatINR(Math.round(old_surcharge));
+    document.getElementById("tax_old").value = formatINR(Math.round(total_old_tax));
+
+    document.getElementById("taxable_new").value = formatINR(Math.round(taxable_new));
+    document.getElementById("tax_new_basic").value = formatINR(Math.round(new_basic_tax));
+    document.getElementById("tax_new_surcharge").value = formatINR(Math.round(new_surcharge));
+    document.getElementById("tax_new").value = formatINR(Math.round(total_new_tax));
+
+    // Best option
+    let bestText = "";
+    if (total_old_tax < total_new_tax) {
+        bestText = "🎉 Old Regime is Better (Lower Tax)";
+        document.getElementById("best_option").style.background =
+            "linear-gradient(90deg, #00aa55, #00dd88)";
+    } else if (total_new_tax < total_old_tax) {
+        bestText = "🎉 New Regime is Better (Lower Tax)";
+        document.getElementById("best_option").style.background =
+            "linear-gradient(90deg, #0066cc, #00c6ff)";
+    } else {
+        bestText = "⚖ Both Regimes Give Same Tax";
+        document.getElementById("best_option").style.background =
+            "linear-gradient(90deg, #ff9900, #ffcc00)";
+    }
+
+    document.getElementById("best_option").innerText = bestText;
+}
+
+// Live HRA update
+document.addEventListener("input", function(e) {
+    if (["basic_salary", "hra_received", "rent_paid", "city_category"].includes(e.target.id)) {
+        calculateHRAExemption();
+    }
+});
+</script>
+
+</body>
+</html>
